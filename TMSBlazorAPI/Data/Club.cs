@@ -13,5 +13,7 @@ public partial class Club
 
     public DateTime? CreatedDate { get; set; }
 
+    public int? AdminId { get; set; }
+
     public virtual User? User { get; set; }
 }

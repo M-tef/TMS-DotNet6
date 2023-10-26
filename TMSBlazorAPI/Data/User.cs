@@ -21,7 +21,11 @@ public partial class User
 
     public string? Password { get; set; }
 
+    public string? Role { get; set; }
+
     public string? MembershipStatus { get; set; }
+
+    public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
 
     public virtual ICollection<Club> Clubs { get; set; } = new List<Club>();
 }

@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace TMSBlazorAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Super Admin,Club Admin,Non Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClubsController : ControllerBase
@@ -92,37 +92,10 @@ namespace TMSBlazorAPI.Controllers
             
         }
 
-        // PUT: api/Clubs/5
-        //[HttpPut("update by {id}")]
-        //public async Task<IActionResult> PutClub(int id, Club club)
-        //{
-        //    if (id != club.ClubId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(club).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!await ClubExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+     
 
         // PUT: api/Clubs/5
+        [Authorize(Roles = "Super Admin,Club Admin")]
         [HttpPut("update by ClubID")]
         public async Task<IActionResult> PutClub(int id, ClubUpdateDto clubDto)
         {
@@ -160,6 +133,7 @@ namespace TMSBlazorAPI.Controllers
         }
 
         // POST: api/Clubs
+        //[Authorize(Roles = "Super Admin,Club Admin,Non Admin")]
         [HttpPost]
         public async Task<ActionResult<ClubCreateDto>> PostClub(ClubCreateDto clubDto)
         {
@@ -187,6 +161,7 @@ namespace TMSBlazorAPI.Controllers
         }
 
         // DELETE: api/Clubs/5
+        [Authorize(Roles = "Super Admin,Club Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClub(int id)
         {

@@ -38,7 +38,9 @@ namespace TMSBlazorAPI.Controllers
             var tokendesc = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(
-                    new Claim[] { new Claim(ClaimTypes.Name, user.Email) }),
+                    new Claim[] { new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role) 
+                    }),
                 Expires = DateTime.UtcNow.AddMinutes(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenkey), SecurityAlgorithms.HmacSha256)
             };
