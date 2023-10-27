@@ -28,4 +28,6 @@ public partial class User
     public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
 
     public virtual ICollection<Club> Clubs { get; set; } = new List<Club>();
+
+    public virtual Refreshtoken? Refreshtoken { get; set; }
 }

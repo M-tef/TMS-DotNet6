@@ -42,6 +42,9 @@ builder.Services.AddAuthentication(item =>
 //Adding DB context !!!
 var connString = builder.Configuration.GetConnectionString("TMSconn");
 builder.Services.AddDbContext<TMSDbContext>(options => options.UseSqlServer(connString));
+
+builder.Services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
+
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var _JwtSettings = builder.Configuration.GetSection("JwtSettings");

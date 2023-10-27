@@ -23,6 +23,8 @@ public partial class TMSDbContext : DbContext
 
     public virtual DbSet<Club> Clubs { get; set; }
 
+    public virtual DbSet<Refreshtoken> Refreshtokens { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,7 +34,7 @@ public partial class TMSDbContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Admin__3214EC2710366ADA");
+            entity.HasKey(e => e.Id).HasName("PK__Admin__3214EC27EAA395FD");
 
             entity.ToTable("Admin");
 
@@ -46,7 +48,7 @@ public partial class TMSDbContext : DbContext
 
         modelBuilder.Entity<AdminStatus>(entity =>
         {
-            entity.HasKey(e => e.StatusId).HasName("PK__Admin_St__C8EE204307BDF6DC");
+            entity.HasKey(e => e.StatusId).HasName("PK__Admin_St__C8EE2043D2D2B897");
 
             entity.ToTable("Admin_Status");
 
@@ -65,7 +67,7 @@ public partial class TMSDbContext : DbContext
 
         modelBuilder.Entity<AdminsDescription>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__Admins_D__719FE4E868D26649");
+            entity.HasKey(e => e.AdminId).HasName("PK__Admins_D__719FE4E88E27D46B");
 
             entity.ToTable("Admins_Description");
 
@@ -78,7 +80,7 @@ public partial class TMSDbContext : DbContext
 
         modelBuilder.Entity<Club>(entity =>
         {
-            entity.HasKey(e => e.ClubId).HasName("PK__Club__D35058C72385C5BA");
+            entity.HasKey(e => e.ClubId).HasName("PK__Club__D35058C71E4333F2");
 
             entity.ToTable("Club");
 
@@ -97,9 +99,31 @@ public partial class TMSDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Clubs).HasForeignKey(d => d.UserId);
         });
 
+        modelBuilder.Entity<Refreshtoken>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("PK_tbl_refreshtoken");
+
+            entity.Property(e => e.UserId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("UserID");
+            entity.Property(e => e.Email)
+                .HasMaxLength(25)
+                .IsUnicode(false);
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.Refreshtoken1).HasColumnName("Refreshtoken");
+            entity.Property(e => e.TokenId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.User).WithOne(p => p.Refreshtoken)
+                .HasForeignKey<Refreshtoken>(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_Refreshtoken_UserId");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__1788CCAC7C504BBC");
+            entity.HasKey(e => e.UserId).HasName("PK__User__1788CCACCBE633D9");
 
             entity.ToTable("User");
 
