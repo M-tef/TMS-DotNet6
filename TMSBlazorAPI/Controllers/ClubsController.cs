@@ -199,10 +199,5 @@ namespace TMSBlazorAPI.Controllers
         {
             return await (_context.Clubs?.AnyAsync(e => e.ClubId == id));
         }
-
-        //private bool ClubExists(int id)
-        //{
-        //    return (_context.Clubs?.Any(e => e.ClubId == id)).GetValueOrDefault();
-        //}
     }
 }
