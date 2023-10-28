@@ -23,6 +23,9 @@ namespace TMSBlazorAPI.Configuration
             CreateMap<Club, ClubDetailDto>()
                 .ForMember(q => q.Users, d => d.MapFrom(map => $"{map.User.FirstName} {map.User.LastName}"))
                 .ReverseMap();
+
+            CreateMap<UserLoginDto, User>().ReverseMap();
+
         }
     }
 }

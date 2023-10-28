@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMSBlazorAPI.Data;
+using TMSBlazorAPI.Models;
 using TMSBlazorAPI.Models.Club;
 using TMSBlazorAPI.Models.User;
 using TMSBlazorAPI.Static;
@@ -67,44 +71,11 @@ namespace TMSBlazorAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(userDto);
         }
 
 
-        // PUT: api/Users/5
-        //[HttpPut("Update by UserID {id}")]
-        //public async Task<IActionResult> PutUser(int id, User user)
-        //{
-        //    if (id != user.UserId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(user).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!UserExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-
-
-
+        [Authorize(Roles = "Super Admin,Club Admin,Non Admin")]
         [HttpPut("Update by UserID ")]
         public async Task<IActionResult> PutUser(int id, UserUpdateDto userDto)
         {
@@ -146,21 +117,9 @@ namespace TMSBlazorAPI.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<UserCreateDto>> PostUser(UserCreateDto userDto)
+        [HttpPost("Register")]
+        public async Task<ActionResult<UserCreateDto>> Register (UserCreateDto userDto)
         {
             try
             {
@@ -178,14 +137,34 @@ namespace TMSBlazorAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"error on POST in {nameof(PostUser)}");
+                logger.LogError(ex, $"error on POST in {nameof(Register)}");
                 return StatusCode(500, Messages.Error500Message);
             }
 
             
         }
 
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<UserCreateDto>> Login(UserLoginDto userDto)
+        {
+            var user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == userDto.Username && item.Password == userDto.Password);
+            var passwordValid = mapper.Map<User>(userDto);
+
+            if (user == null )
+            {
+                return NotFound();
+            }
+            //return Accepted();
+
+            var welcome = "Hello, Welcome to BCS ";
+            // return base.Content(html, "text/html");
+            return base.Content(welcome , "text/html");
+        }
+
+
         // DELETE: api/Users/5
+        [Authorize(Roles = "Super Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
